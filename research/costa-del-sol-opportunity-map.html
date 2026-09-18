@@ -1,0 +1,299 @@
+<title>Costa del Sol Opportunity Map</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --surface-2:#e9edf1; --ink:#15202e; --ink-2:#4a5566; --ink-3:#7b8593;
+  --line:#d6dce3; --accent:#c9780a; --accent-ink:#8a5106; --accent-soft:#fbefd9;
+  --teal:#0f7a78; --teal-soft:#dcefee; --red:#b3402e; --red-soft:#f6e1dc;
+  --display:"Sora",system-ui,sans-serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f151d; --surface:#171f29; --surface-2:#1f2935; --ink:#e7ebf0; --ink-2:#b4bcc7; --ink-3:#8791a0;
+    --line:#2c3743; --accent:#e8a23a; --accent-ink:#f3c57a; --accent-soft:#33261099; --teal:#4cc1be; --teal-soft:#123736; --red:#e5795f; --red-soft:#3a1f1a;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f151d; --surface:#171f29; --surface-2:#1f2935; --ink:#e7ebf0; --ink-2:#b4bcc7; --ink-3:#8791a0;
+  --line:#2c3743; --accent:#e8a23a; --accent-ink:#f3c57a; --accent-soft:#33261099; --teal:#4cc1be; --teal-soft:#123736; --red:#e5795f; --red-soft:#3a1f1a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1060px;margin:0 auto;padding-block:32px 64px;padding-inline:16px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+h1{font-size:clamp(28px,4.5vw,42px);line-height:1.1;font-weight:700;letter-spacing:-.01em}
+h2{font-size:clamp(20px,3vw,26px);font-weight:600;margin-top:56px;margin-bottom:8px;padding-top:16px;border-top:2px solid var(--ink)}
+h3{font-size:18px;font-weight:600}
+p{margin:0 0 12px;max-width:72ch}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+.lede{font-size:18px;color:var(--ink-2);max-width:68ch;margin-top:14px}
+.meta{font-family:var(--mono);font-size:13px;color:var(--ink-3);margin-top:10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:28px}
+.kpi{background:var(--surface);padding:14px 14px 12px}
+.kpi b{display:block;font-family:var(--mono);font-size:22px;font-weight:500;font-variant-numeric:tabular-nums;color:var(--ink)}
+.kpi span{display:block;font-size:13px;color:var(--ink-2);margin-top:4px;line-height:1.35}
+.note{background:var(--surface-2);border-left:3px solid var(--accent);padding:12px 16px;margin:16px 0;font-size:15px;color:var(--ink-2)}
+.chain{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0 8px;counter-reset:step}
+.chain div{background:var(--surface);border:1px solid var(--line);padding:14px;font-size:14.5px;position:relative;counter-increment:step}
+.chain div::before{content:counter(step);font-family:var(--mono);font-size:12px;color:var(--accent-ink);display:block;margin-bottom:6px}
+.chain b{display:block;font-family:var(--display);font-weight:600;font-size:15px;margin-bottom:4px}
+.tablewrap{overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--surface)}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);font-weight:500;background:var(--surface-2)}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{display:inline-block;height:8px;background:var(--teal);vertical-align:middle;border-radius:2px}
+.score{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;white-space:nowrap}
+.cards{display:grid;gap:18px;margin-top:20px}
+.card{background:var(--surface);border:1px solid var(--line);padding:20px 20px 18px}
+.card header{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.rank{font-family:var(--mono);font-size:13px;color:var(--accent-ink);background:var(--accent-soft);padding:4px 8px;border-radius:2px;white-space:nowrap}
+.card h3{flex:1 1 300px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:11.5px;padding:3px 8px;border-radius:2px;background:var(--teal-soft);color:var(--teal);white-space:nowrap}
+.chip.warn{background:var(--red-soft);color:var(--red)}
+.chip.neutral{background:var(--surface-2);color:var(--ink-2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px}
+@media (max-width:640px){.grid2{grid-template-columns:1fr}}
+.field b{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px}
+.field p{font-size:14.5px;margin:0;max-width:none}
+.field.full{grid-column:1/-1}
+ol.list,ul.list{padding-left:20px;margin:8px 0 0}
+.list li{margin-bottom:8px;max-width:78ch}
+.disp td:first-child{font-weight:600}
+.small{font-size:13.5px;color:var(--ink-3)}
+a{color:var(--teal)}
+footer{margin-top:48px;border-top:1px solid var(--line);padding-top:16px;font-size:13.5px;color:var(--ink-3)}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Málaga province · Costa del Sol · compiled 18 September 2026</div>
+  <h1>Costa del Sol Opportunity Map</h1>
+  <p class="lede">Twelve business opportunities ranked on validated evidence: what people complain about, who is under-served, where incumbents are hated but still paid, and which models from other countries fit. Built from seven research streams, about 367 searches, roughly 650 sourced data rows and 90 pain-point clusters with verbatim quotes.</p>
+  <p class="meta">Full evidence tables with every URL: repo folder <code>research/evidence/</code> (7 files). Report: <code>research/COSTA_DEL_SOL_OPPORTUNITIES.md</code>.</p>
+
+  <div class="kpis">
+    <div class="kpi"><b>1,820,507</b><span>residents (Jul 2026), +19,000 a year; 93% of growth is foreign</span></div>
+    <div class="kpi"><b>58%</b><span>of household income taken by rent, the highest ever recorded in Spain</span></div>
+    <div class="kpi"><b>37.0%</b><span>of home purchases by foreigners (Q2 2026); 60.9% in Marbella</span></div>
+    <div class="kpi"><b>26.76M</b><span>airport passengers in 2025, +6.6% so far in 2026</span></div>
+    <div class="kpi"><b>~20,000</b><span>unfilled vacancies while unemployment sits at 11.7 to 12.6%</span></div>
+    <div class="kpi"><b>22,000+</b><span>planned homes blocked by electricity-grid supply denials</span></div>
+    <div class="kpi"><b>~91,000</b><span>residents over 80; 65+ share heading to ~26% by 2039</span></div>
+    <div class="kpi"><b>1.3 / 5</b><span>Goldcar's Trustpilot score on 54,455 reviews: the worst-rated local category</span></div>
+  </div>
+
+  <div class="note">How to read the numbers: the research environment could only read search-index snippets and summaries, not full pages. Every figure is tied to a URL in the evidence files, and anything that appeared only in a summary is flagged "unverified" there. Forum thread counts are relative prominence signals, not population estimates.</div>
+
+  <h2>The knot: one root cause behind most of the pain</h2>
+  <p>Complaint data from all seven streams converges on a single causal chain. Businesses that supply housing and mobility to workers unlock value in every service sector at once. Businesses that supply trust (vetting, guarantees, transparent fees, bilingual service) win in a market where a quarter to a half of customers are foreign, many are absent most of the year, and incumbents are fragmented sole traders or badly rated national chains.</p>
+  <div class="chain">
+    <div><b>Housing is unaffordable</b>Number-one complaint (24 threads, intensity 5/5). 64% of residents name it the province's main problem. Málaga city delivered 2 social homes in 2025 against 34,366 applicants.</div>
+    <div><b>Workers cannot live near jobs</b>~30 Hospital Costa del Sol staff slept in cars in spring 2026. Rooms at €800 to €1,000 against a €1,406 to €1,512 waiter wage. 3 of 4 outside workers cannot find housing.</div>
+    <div><b>Every sector is short-staffed</b>5,000 to 7,000 hospitality posts, 8,000 to 12,000 construction workers, carers and solar technicians unfilled. One in five patients cannot get a GP appointment.</div>
+    <div><b>Mobility compounds it</b>No train west of Fuengirola until the 2030s. Cercanías at 172% occupancy. Two thirds of Marbella taxi-app requests unanswered. A-7 at 110,000 vehicles a day.</div>
+    <div><b>Quality and trust erode</b>30% of British visitors would not return. The most repeated expat request is a trustworthy tradesperson. Airport car hire is the worst-reviewed category.</div>
+  </div>
+
+  <h2>Ranking</h2>
+  <p>Each consolidated opportunity was scored 1 to 5 on strength of pain evidence, size of the addressable market, weakness of incumbents, speed and capital needed to start, and defensibility. Total out of 25.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>#</th><th>Opportunity</th><th>Evidence</th><th>Market</th><th>Incumbent gap</th><th>Speed / capital</th><th>Moat</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>English-first managed home care + care navigation for foreign retirees</td><td class="num">5</td><td class="num">5</td><td class="num">4</td><td class="num">4</td><td class="num">4</td><td><span class="score"><span class="bar" style="width:88px"></span>22</span></td></tr>
+      <tr><td class="num">2</td><td>Employed multi-trade operator + absentee-owner home care with SLA</td><td class="num">5</td><td class="num">4</td><td class="num">5</td><td class="num">4</td><td class="num">3</td><td><span class="score"><span class="bar" style="width:84px"></span>21</span></td></tr>
+      <tr><td class="num">3</td><td>Legal appointment-and-filing concierge + English-first digital gestoría</td><td class="num">5</td><td class="num">4</td><td class="num">4</td><td class="num">5</td><td class="num">3</td><td><span class="score"><span class="bar" style="width:84px"></span>21</span></td></tr>
+      <tr><td class="num">4</td><td>Key-worker and seasonal-worker housing with shuttle</td><td class="num">5</td><td class="num">4</td><td class="num">5</td><td class="num">2</td><td class="num">4</td><td><span class="score"><span class="bar" style="width:80px"></span>20</span></td></tr>
+      <tr><td class="num">5</td><td>Transparent delivered-to-door car hire at Málaga airport</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num">2</td><td class="num">3</td><td><span class="score"><span class="bar" style="width:80px"></span>20</span></td></tr>
+      <tr><td class="num">6</td><td>Landlord de-risking bundle + verified rental marketplace</td><td class="num">5</td><td class="num">4</td><td class="num">4</td><td class="num">3</td><td class="num">3</td><td><span class="score"><span class="bar" style="width:76px"></span>19</span></td></tr>
+      <tr><td class="num">7</td><td>Guaranteed-availability ride service, Marbella-Estepona and airport</td><td class="num">5</td><td class="num">4</td><td class="num">4</td><td class="num">3</td><td class="num">3</td><td><span class="score"><span class="bar" style="width:76px"></span>19</span></td></tr>
+      <tr><td class="num">8</td><td>Behind-the-meter energy for grid-blocked developments</td><td class="num">4</td><td class="num">5</td><td class="num">4</td><td class="num">2</td><td class="num">4</td><td><span class="score"><span class="bar" style="width:76px"></span>19</span></td></tr>
+      <tr><td class="num">9</td><td>Holiday-let compliance, honest-fee management and conversion</td><td class="num">5</td><td class="num">4</td><td class="num">3</td><td class="num">4</td><td class="num">2</td><td><span class="score"><span class="bar" style="width:72px"></span>18</span></td></tr>
+      <tr><td class="num">10</td><td>Escrow-backed renovation management and snagging</td><td class="num">4</td><td class="num">3</td><td class="num">4</td><td class="num">4</td><td class="num">3</td><td><span class="score"><span class="bar" style="width:72px"></span>18</span></td></tr>
+      <tr><td class="num">11</td><td>Bilingual vocational academy and staffing with housing</td><td class="num">4</td><td class="num">4</td><td class="num">3</td><td class="num">3</td><td class="num">3</td><td><span class="score"><span class="bar" style="width:68px"></span>17</span></td></tr>
+      <tr><td class="num">12</td><td>Corporate relocation and school placement for tech hubs</td><td class="num">3</td><td class="num">3</td><td class="num">3</td><td class="num">4</td><td class="num">3</td><td><span class="score"><span class="bar" style="width:64px"></span>16</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>The top ten in detail</h2>
+  <div class="cards">
+
+    <article class="card">
+      <header><span class="rank">Rank 1 · 22/25</span><h3>English-first managed home care and care navigation for foreign retirees</h3><div class="chips"><span class="chip">Evidence strong</span><span class="chip neutral">Analog: Home Instead, Buurtzorg</span></div></header>
+      <div class="grid2">
+        <div class="field full"><b>The pain</b><p>Málaga has ~8,600 people waiting for dependency assessment, the most in Andalucía; average resolution 435 to 446 days against a 180-day legal limit; 6,995 Andalusians died waiting in 2025 and 2,204 in Jan to May 2026. Public home help is capped at 94 hours a month. Care-home capacity is ~2.5 places per 100 over-65s against a recommended 5; 84% of 7,512 places are private at ~€2,324 a month. Reuters (Jun 2026) documents British families unable to care for parents under the 90/180-day rule; more UK-born over-65s now leave Spain than arrive. A Marbella volunteer project alone checks on 240 isolated older people. Junta teleassistance has 130-user queues and 20-minute waits.</p></div>
+        <div class="field"><b>Who pays</b><p>Self-funding retirees and adult children abroad (€18 to €28/h; €2,000 to €3,200/month live-in), plus Junta cash benefits once dependency is recognised. The Sep 2026 reform cuts the deadline to 3 months and makes services combinable.</p></div>
+        <div class="field"><b>Market size</b><p>~40,000 foreign over-65s; at 10 to 15% needing paid help and €1,500/month, €70 to €110M a year in the foreign segment alone. Spanish market several times larger. Portugal's senior homes run at 95.4% occupancy on the same demographics.</p></div>
+        <div class="field"><b>Incumbents</b><p>Senior Home Care, Costa Angels, British Care Services, Miraflores (Dutch), Cuideo, Cuidum. All small and owner-run: no nurse-led plans, no family app, no transparent pricing, no English dementia specialism.</p></div>
+        <div class="field"><b>Risks</b><p>Carer recruitment in a low-unemployment economy, domestic-worker labour law, pensioner price sensitivity, the informal cash market.</p></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <header><span class="rank">Rank 2 · 21/25</span><h3>Employed multi-trade operator and absentee-owner home care with an SLA</h3><div class="chips"><span class="chip">Evidence strong</span><span class="chip neutral">Analog: Pimlico Plumbers, Florida home watch</span></div></header>
+      <div class="grid2">
+        <div class="field full"><b>The pain</b><p>"Can anyone recommend a reliable English-speaking plumber, electrician, builder" is the most repeated request in expat groups (~18 threads in a year, 8+ groups); a Sep 2026 post asks for a Checkatrade equivalent. Guardia Civil warns of "reformas fantasma" (50% deposit, then vanish). Incumbents that should solve this are rated badly: HomeServe/Reparalia has 3,400 Trustpilot reviews with days-to-months waits; Habitissimo's Pro app is 2.9/5 on 4,493 ratings; pros call Cronoshare's lead model fraudulent. Local answers are a directory (CostaTrades), a single-trade lead router (CoastPlumber) and sole traders. Key-holding for absentee owners is a cottage industry at €89 to €625 a year with no SLA or insurance.</p></div>
+        <div class="field"><b>Who pays</b><p>41,953 foreign owners; 170,438 second homes; only 11% of buyers live in the province. Fixed-price call-outs (€150), small works (~€1,500), €30 to €80/month home-care subscriptions.</p></div>
+        <div class="field"><b>Market size</b><p>€2 to €5M revenue for one employed-workforce operator on the western coast; ~€5M ARR at 5% subscription penetration of second homes; 80,832 pools give a ~€96M/year maintenance pool.</p></div>
+        <div class="field"><b>Room for a new player</b><p>Very large: nobody operates an employed workforce with invoices, guarantees and bilingual dispatch. The binding constraint is hiring (construction 8,000 to 12,000 short), which links to Rank 4.</p></div>
+        <div class="field"><b>Risks</b><p>Labour shortage, seasonality, liability, the free Facebook alternative.</p></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <header><span class="rank">Rank 3 · 21/25</span><h3>Legal appointment-and-filing concierge and an English-first digital gestoría</h3><div class="chips"><span class="chip">Evidence strong</span><span class="chip neutral">Analog: Dubai PRO, Xolo, Boundless</span></div></header>
+      <div class="grid2">
+        <div class="field full"><b>The pain</b><p>Police-station immigration appointments "se venden hasta por 400 euros" (El Periódico, Aug 2026); bots resell slots at €40 to €500; a Málaga group was arrested charging €300 per asylum appointment; Congress passed a resolution (Nov 2025) to eradicate the market. Brits wait 14 weeks for TIE cards. The 2026 regularisation brought 1.17M applications (39,899 in Málaga) with ~50 central staff for over 1M files. DGT licence exchanges wait 2 to 4 months; Convenio Especial health approvals took 7 months. Tax side: "my gestor gave me the wrong answer", "soon to be ex gestor", fines after bad advice; English-speaking gestorías charge 30 to 50% more and the worst "are essentially translation services with a computer".</p></div>
+        <div class="field"><b>Who pays</b><p>~124,000 foreign Social Security affiliates in the province (+9%); 27,875 digital-nomad permit holders nationally (tripled in a year); Beckham-law users; 11,800 foreign buyers a year who each need an NIE. €150 to €400 per procedure; €50 to €150/month subscriptions.</p></div>
+        <div class="field"><b>Market size</b><p>20,000 paid procedures a year at €200 is €4M in Málaga; 10,000 foreign freelancers and visa holders at €900 a year is €9M ARR.</p></div>
+        <div class="field"><b>Room for a new player</b><p>Large and asset-light. Use the legal channel (electronic registry, colegiado proxy, Cl@ve representation) instead of police slots; live case tracking; error insurance; cross-border tax (UK, US, DE).</p></div>
+        <div class="field"><b>Risks</b><p>Being confused with the mafias; a government fix shrinking the pain; professional liability; Hacienda rule churn.</p></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <header><span class="rank">Rank 4 · 20/25</span><h3>Key-worker and seasonal-worker housing with a shuttle</h3><div class="chips"><span class="chip">Evidence strong</span><span class="chip warn">Capital heavy</span><span class="chip neutral">Analog: NHS key-worker housing, Whistler</span></div></header>
+      <div class="grid2">
+        <div class="field full"><b>The pain</b><p>Hospital staff in cars and campervans; a waiter shortage of 5,000 to 7,000 despite 20,000 registered job-seekers; 3 in 4 outside workers unable to find housing; Puente Romano bought a building for staff; a Marbella chiringuito owner needs 300 staff and offers lodging; a restaurateur pays €3,500 and lends three homes to attract workers. The Málaga-to-hospital staff shuttle was cancelled in Feb 2026. Adecco names housing, mobility and experience as the three hiring barriers.</p></div>
+        <div class="field"><b>Who pays</b><p>Hotels and restaurant groups per bed per month; the health service via master lease (already proposed politically); workers at a capped rent near €450 a bed.</p></div>
+        <div class="field"><b>Market size</b><p>6,000 seasonal beds for six months at €450 to €600 is €16 to €22M a year; 5,000 key-worker beds year-round is €27M gross rent; an employer-pooled inland shuttle adds ~€3M for 3,000 commuters.</p></div>
+        <div class="field"><b>Room for a new player</b><p>Wide open. Coliving operators price for nomads; nothing is coordinated. Realistic entry is master-leasing under-used inland aparthotels, student residences and unsold stock, bundled with transport.</p></div>
+        <div class="field"><b>Risks</b><p>Housing-use licensing, tenancy law on short worker leases, political optics, thin margins, seasonality.</p></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <header><span class="rank">Rank 5 · 20/25</span><h3>Transparent, delivered-to-door car hire at Málaga airport</h3><div class="chips"><span class="chip">Evidence strong</span><span class="chip warn">Fleet capex</span><span class="chip neutral">Analog: Virtuo, Sixt Express</span></div></header>
+      <div class="grid2">
+        <div class="field full"><b>The pain</b><p>The most brutally documented incumbent failure in the dataset. Goldcar España 1.3/5 on 54,455 reviews; Thrifty 1.3; Budget 1.4; Firefly 1.2; easyJet's broker 1.0; Delpaso 1.9. Same script every time: 45 to 60-minute desk queues, insurance hard-sell, €2,000 to €4,000 deposits, a €25 fee to release the deposit, disputed pre-existing damage. FACUA filed against Click Rent (Jul 2026); OCU logged 181 complaints in 2.5 months. Local independents prove customers reward honesty: CarGest 4.7, MalagaCar.com 4.4 on 1,165 reviews, Helle Hollis 4.0. Their weakness is the off-airport shuttle.</p></div>
+        <div class="field"><b>Who pays</b><p>26.76M airport passengers, growing 6.6% in 2026; renters pay a €15 to €30 service fee or a margin on an owned fleet delivered to villas and hotels.</p></div>
+        <div class="field"><b>Market size</b><p>If 10 to 15% of arrivals rent, 1.3 to 2M rentals a year from one airport; 3% share on a fee model is €0.8 to €1.2M, far larger with a fleet.</p></div>
+        <div class="field"><b>Room for a new player</b><p>Yes. The clearest case of an old business that works commercially but is hated. Incumbent economics depend on the upsell, so they cannot easily copy a transparent model.</p></div>
+        <div class="field"><b>Risks</b><p>Fleet capex, insurance cost, airport concession rules for off-site delivery, seasonality.</p></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <header><span class="rank">Rank 6 · 19/25</span><h3>Landlord de-risking bundle and a verified rental marketplace</h3><div class="chips"><span class="chip">Evidence strong</span><span class="chip neutral">Analog: Goodlord, Rhino, Kautionsfrei</span></div></header>
+      <div class="grid2">
+        <div class="field full"><b>The pain</b><p>Landlords keep stock off the market or push 11-month contracts: 706 evictions in H1 2025 (3.9 a day, 79% for non-payment), ~450 squats a year, 6 to 18-month evictions, average arrears €8,489. Temporary-let supply rose 22% nationally while permanent supply fell 3%. Tenant side: 143 applicants per listing, rising fake-landlord scams (a Marbella one jailed Jul 2026), the AVRA deposit scheme abolished Jan 2026. The "guaranteed rent" market leader, Alquiler Seguro, had a €3.6M fine confirmed in Apr 2026 for charging tenants illegal fees. Local operators already sell "rent by the 5th, 0% arrears" at 4 to 12% of rent.</p></div>
+        <div class="field"><b>Who pays</b><p>Landlords (3.5 to 5% today for guarantee alone; a 6 to 8% bundle with vetting, keyless, legal fast-track and insurance is viable) and tenants for a verified passport.</p></div>
+        <div class="field"><b>Market size</b><p>~20,000 lets a year at €1,400/month gives a €17M premium pool at 5%; unlocking even 10,000 of the claimed empty homes adds far more.</p></div>
+        <div class="field"><b>Room for a new player</b><p>Yes, for a Costa-only, bilingual, tenant-friendly operator that does not charge tenants.</p></div>
+        <div class="field"><b>Risks</b><p>Underwriting losses, eviction law, rent-control changes, liquidity against Idealista.</p></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <header><span class="rank">Rank 7 · 19/25</span><h3>Guaranteed-availability ride service for Marbella-Estepona and the airport</h3><div class="chips"><span class="chip">Evidence strong</span><span class="chip warn">Licence constrained</span><span class="chip neutral">Analog: Blacklane, Addison Lee</span></div></header>
+      <div class="grid2">
+        <div class="field full"><b>The pain</b><p>A Universidad Pablo de Olavide study (Diario Sur, Jul 2026) analysed ~10M taxi-app requests (Jan 2023 to May 2026): 3.5M rejected for lack of vehicles; two thirds of Marbella requests unanswered. Marbella has 347 taxi licences for 173,420 residents. Airport waits cost ~€27M a year. Feria 2026: 40-minute taxi queues at 3am. Málaga has more VTC (3,398) than taxis (2,708), but supply sits at the airport and city. Avanza bus complaints in Marbella and Estepona are constant; Estepona cracked down on the operator in Oct 2025.</p></div>
+        <div class="field"><b>Who pays</b><p>Hotels, restaurants and beach clubs on an SLA subscription (a car within X minutes, 22:00 to 03:00); wedding and MICE organisers (2,400 to 2,700 international weddings a year); tourists at a premium fare.</p></div>
+        <div class="field"><b>Market size</b><p>~1.05M unmet requests a year in Andalucía; a 20% Marbella-Estepona share at €25 is ~€5M of unmet fare value; 2% of western-coast airport transfers at €70 is ~€19M.</p></div>
+        <div class="field"><b>Room for a new player</b><p>Demand proven; supply constrained by the Andalucía VTC rule (pre-booking only, 1 VTC per 30 taxis). Entry means acquiring or leasing VTC authorisations and contracting hotels, which is also the moat.</p></div>
+        <div class="field"><b>Risks</b><p>Licence scarcity and cost, taxi-sector protest, driver housing.</p></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <header><span class="rank">Rank 8 · 19/25</span><h3>Behind-the-meter energy for grid-blocked developments</h3><div class="chips"><span class="chip">Evidence strong (gap), medium (model)</span><span class="chip warn">Capital heavy</span><span class="chip neutral">Analog: solar-plus-storage microgrids, VPPs</span></div></header>
+      <div class="grid2">
+        <div class="field full"><b>The pain</b><p>More than 22,000 planned homes and 142 housing and business projects in the province are stalled by Endesa supply denials (Diario Sur, ABC, Sur in English, Jan to May 2026); new-build owners in Estepona reportedly wait nine months for connection; a data-centre investment reportedly left Andalucía. This coincides with record prices, record in-migration and a national slowdown in self-consumption installations in 2025.</p></div>
+        <div class="field"><b>Who pays</b><p>Developers who need to unlock sales, communities of owners, hotels and commercial projects, with Junta and EU incentives.</p></div>
+        <div class="field"><b>Market size</b><p>22,000 homes at €8,000 to €12,000 of on-site generation and storage each is €175 to €265M of addressable capex in the province.</p></div>
+        <div class="field"><b>Room for a new player</b><p>No local specialist in grid-bypass energy-as-a-service for developments was found. Adjacent: zero-upfront rooftop leasing for the coast's detached homes.</p></div>
+        <div class="field"><b>Risks</b><p>Self-consumption and temporary-supply regulation, peak-demand sizing, developer credit risk, the grid upgrade eventually removing the constraint.</p></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <header><span class="rank">Rank 9 · 18/25</span><h3>Holiday-let compliance, honest-fee management and conversion to legal mid-term lets</h3><div class="chips"><span class="chip">Evidence strong (regulation)</span><span class="chip warn">Rules keep moving</span><span class="chip neutral">Analog: Avalara MyLodgeTax, Blueground</span></div></header>
+      <div class="grid2">
+        <div class="field full"><b>The pain</b><p>Málaga city banned new tourist flats in 43 districts (Jan 2025), then city-wide until 2028; Manilva followed; communities can veto with a 3/5 vote since Apr 2025; the national registry was created Jul 2025 and annulled by the Supreme Court in May 2026 (Junta puts the cost at €500M); only 1 in 5 Andalusian tourist flats met the state-registry requirements; 3,812 Málaga flats were cancelled by the Junta in 2024-25 and 13,037 region-wide by Feb 2026; average loss per de-listed owner ~€33,000. Managers charge 15 to 25%; one owner reports a headline 18% becoming 50% with extras.</p></div>
+        <div class="field"><b>Who pays</b><p>Owners of ~45,000 to 90,000 tourist flats: SaaS €20 to €50/month, pre-purchase legality reports €150 to €300, conversion management at 8 to 10%.</p></div>
+        <div class="field"><b>Market size</b><p>20% SaaS penetration is €6.5M ARR; 5% of stock converting to compliant mid-term lets at 9% management is ~€7.8M ARR.</p></div>
+        <div class="field"><b>Room for a new player</b><p>Yes; the defensible piece is the per-building legal-status map and corporate mid-term demand (TechPark, hospitals, relocating families).</p></div>
+        <div class="field"><b>Risks</b><p>Small tickets; regulation as a moving target; the Junta could publish its own map.</p></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <header><span class="rank">Rank 10 · 18/25</span><h3>Escrow-backed renovation management and independent snagging</h3><div class="chips"><span class="chip">Evidence medium-strong</span><span class="chip neutral">Analog: UK snagging, Dubai snagging, Buildstore</span></div></header>
+      <div class="grid2">
+        <div class="field full"><b>The pain</b><p>Deposit-and-vanish builders (Guardia Civil alert; multi-victim cases with hundreds of thousands lost); building licences average 196 days in Málaga city and 3 to 12 months in Marbella against a 3-month legal limit; one-year waits to reform a home; construction costs +5 to 5.5% in 2025; new-build sales at twice available stock (12,000 sold vs 5,328 in stock in 2025), leaving foreign buyers little leverage over delays and defects.</p></div>
+        <div class="field"><b>Who pays</b><p>Renovating owners (typical reform €30,000 to €150,000, 5 to 8% fee); new-build buyers (€400 to €900 per inspection).</p></div>
+        <div class="field"><b>Market size</b><p>300 projects a year at €60,000 and 6% is €1.1M in fees; ~6,000 completions a year at 20% uptake is ~€0.7M in snagging.</p></div>
+        <div class="field"><b>Room for a new player</b><p>Yes; architects do site direction but not escrow, and no bilingual snagging brand was found. Marbella, Málaga and Mijas all launched licence-simplification instructions in 2025-26.</p></div>
+        <div class="field"><b>Risks</b><p>Client-money rules, liability, contractor scarcity.</p></div>
+      </div>
+    </article>
+  </div>
+
+  <h2>Old businesses that work commercially but are ripe for displacement</h2>
+  <p>Incumbents that make money today while their customers are visibly unhappy. Each is a target for a modern, transparent, bilingual operator.</p>
+  <div class="tablewrap">
+  <table class="disp">
+    <thead><tr><th>Category</th><th>Incumbents</th><th>Evidence of dissatisfaction</th><th>Modern playbook</th></tr></thead>
+    <tbody>
+      <tr><td>Airport car hire</td><td>Goldcar, Record Go, Click Rent, Thrifty, Budget, Firefly, brokers</td><td>1.0 to 1.9/5 on tens of thousands of reviews; FACUA and OCU actions; 45 to 60-minute queues; €2,000 to €4,000 deposits</td><td>Delivered-to-door, full cover included, published wait data</td></tr>
+      <tr><td>Insurer home assistance</td><td>HomeServe / Reparalia, insurer networks</td><td>3,400 Trustpilot reviews; "a week for the plumber to call"; OCU complaints of unsolicited enrolment</td><td>Employed technicians, 2-hour windows, price book</td></tr>
+      <tr><td>Trades lead-gen</td><td>Habitissimo, Cronoshare</td><td>Pro app 2.9/5; pros call the model fraudulent; review suppression complaints</td><td>Document-verified pros, mandatory invoice, dispute mediation</td></tr>
+      <tr><td>Guaranteed-rent agencies</td><td>Alquiler Seguro</td><td>€3.6M fine confirmed Apr 2026 for charging tenants; investigative exposé</td><td>Landlord-paid, tenant-friendly, insured bundle</td></tr>
+      <tr><td>Holiday-let managers</td><td>Dozens of local agencies, Weguest</td><td>Headline 18% fee becoming 50%; comparison sites exist because owners cannot compare</td><td>Fixed transparent fee, owner dashboard, compliance included</td></tr>
+      <tr><td>Gestorías</td><td>Thousands of small firms; English-speaking at +30 to 50%</td><td>"Wrong answer", "ex gestor", fines; "translation services with a computer"</td><td>Cross-border digital gestoría with error insurance</td></tr>
+      <tr><td>Community administrators</td><td>Traditional administradores de fincas</td><td>Residents unite against "lack of transparency" (Málaga Hoy); 61% report squatting cases; €1.8bn national arrears; mandatory mediation from 2025</td><td>Multilingual owner app, remote voting, tourist-flat vote workflow, mediation</td></tr>
+      <tr><td>Key-holders</td><td>Micro firms at €89 to €625 a year</td><td>No SLA, no insurance, no tech</td><td>Accredited, insured home watch</td></tr>
+      <tr><td>Public teleassistance</td><td>Junta de Andalucía service</td><td>130-user queues, 20-minute waits, daily software failures</td><td>Private 24/7 bilingual telecare</td></tr>
+      <tr><td>Pre-paid funeral plans</td><td>Unregulated Spanish plans (Iberian collapsed 2025)</td><td>Expats lost thousands; demand for regulation</td><td>Trust-backed plan plus bilingual bereavement admin</td></tr>
+      <tr><td>Interurban buses</td><td>Avanza on the western coast</td><td>Estepona crackdown Oct 2025; constant complaints on "Marbella se queja" (193,000 followers)</td><td>Employer-pooled shuttles, on-demand microtransit</td></tr>
+      <tr><td>Airport transfer firms</td><td>Fragmented pre-book operators</td><td>No live tracking, no SLA</td><td>Hotel-contracted SLA fleet</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Underserved segments with clear evidence</h2>
+  <ol class="list">
+    <li><strong>Foreign homeowners needing vetted tradespeople and gestores.</strong> The most repeated request type; 41,953 foreign owners, 170,438 second homes.</li>
+    <li><strong>Elderly foreigners living alone, dementia care, post-Brexit families.</strong> ~40,000 foreign over-65s; no English dementia unit found.</li>
+    <li><strong>Non-EU residents stuck in appointment limbo.</strong> 39,899 regularisation applicants in Málaga; 14-week TIE waits; digital-nomad holders.</li>
+    <li><strong>Priced-out key workers</strong> (nurses, waiters, teachers). 20,000 registered hospitality job-seekers cannot afford to live where the jobs are.</li>
+    <li><strong>Small hospitality businesses that cannot staff.</strong> 75% report hiring difficulty; bars closing on Mondays.</li>
+    <li><strong>Relocating families</strong> (Nordic, Dutch, German, British, tech hires). 12 to 18-month school waiting lists with €2,000 non-refundable fees; continuous nanny demand.</li>
+    <li><strong>Non-resident owners exposed to fraud and compliance traps.</strong> Fake-lawyer conveyancing scam (€100,000, Aug 2026), Modelo 210 surprises, 90/180 fines, EES queues of 90 minutes to 2 hours.</li>
+    <li><strong>Urbanisation residents with poor connectivity, water pressure and parcel delivery.</strong> Over 47,000 homes without adequate broadband.</li>
+    <li><strong>People with reduced mobility.</strong> Fuengirola's accessible beach points served 7,798 users in ten weeks; provision elsewhere is patchy.</li>
+    <li><strong>Newcomers from Latin America, Ukraine and Morocco</strong>, now the fastest-growing groups, whose needs differ from the retiree services the coast was built for.</li>
+  </ol>
+
+  <h2>Second-tier ideas</h2>
+  <ul class="list">
+    <li>Fixed-fee membership primary care and GP-at-home for over-60s (8.7-day GP waits; insurers cap entry at 75 and raise senior premiums up to 30%).</li>
+    <li>English-language dementia day centre and respite.</li>
+    <li>Bilingual staffing and visa-sponsorship marketplace tied to housing.</li>
+    <li>Corporate relocation-as-a-service for TechPark, Google, Vodafone and Citi hires (€3,500 to €5,000 per hire) with school-placement intelligence.</li>
+    <li>Community-of-owners digital administration plus the now-mandatory mediation.</li>
+    <li>Restaurant no-show protection and bilingual booking concierge (€15,500 a year lost per restaurant; only 20% use card guarantees).</li>
+    <li>Pool and garden subscription with water-compliance features (80,832 pools; filling bans in 2024-25; drought formally ended Apr 2026, so demand is cyclical).</li>
+    <li>Parcel lockers and address normalisation for urbanisations.</li>
+    <li>Subsidy and compliance concierge for solar grants, building and lift inspections and energy certificates.</li>
+    <li>SME e-invoicing plus late-payment recovery for foreign-owned small businesses (payment period 78 to 80 days vs 60-day limit; insolvencies +44%).</li>
+    <li>Probate bridge finance for non-resident heirs facing Group III inheritance tax.</li>
+    <li>Cyber-fraud protection for elderly foreign residents (Marbella cybercrime +17%).</li>
+  </ul>
+
+  <h2>What could not be verified, and how to close the gaps</h2>
+  <p>The evidence is strong on pain and demand and weaker on willingness to pay and unit economics. Before committing capital to any of the top ten:</p>
+  <ol class="list">
+    <li><strong>Run 20 to 30 customer interviews per opportunity</strong> with the exact segment (hotel HR directors and hospital union reps for worker housing; adult children in the UK for home care; villa owners for home watch).</li>
+    <li><strong>Pull the primary datasets</strong> the environment could not open: INE padrón by nationality and age per coastal municipality, the Junta tourist-flat registry by municipality, Catastro second-home ownership by nationality, pending solar-grant files, Marbella's licence backlog after its Jan 2026 instruction.</li>
+    <li><strong>Verify the flagged numbers</strong>, especially the "150,000 empty homes" political claim, the flex-living pipeline figures, the Marbella cybercrime rise and anything marked "snippet" or "unverified".</li>
+    <li><strong>Test the regulatory perimeter</strong> for the concierge and ride ideas with a Málaga lawyer: paid intermediation in appointments and VTC pre-booking rules are where a good idea becomes an illegal one.</li>
+    <li><strong>Check the labour maths</strong> for any operator model: every service idea on this coast competes for the same scarce workers, which is why worker housing (Rank 4) is a multiplier for Ranks 1, 2, 7 and 11.</li>
+  </ol>
+
+  <footer>
+    Sources: INE, Colegio de Registradores, Junta de Andalucía, SEPE, AENA, CNMC, Observatorio Estatal de la Dependencia, Savills, Universidad Pablo de Olavide (via Diario Sur), Diario Sur, Málaga Hoy, La Opinión de Málaga, El Español Málaga, Sur in English, Olive Press, Euro Weekly News, Reuters, Trustpilot, FACUA, OCU, Reddit, Facebook expat groups. Seven evidence files with every figure and URL are in the repository under <code>research/evidence/</code>.
+  </footer>
+</div>
